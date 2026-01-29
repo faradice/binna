@@ -29,6 +29,30 @@ class TestSveitarfelag(unittest.TestCase):
         s = Sveitarfelag(name="Reykjavík", population=131136, region="Höfuðborgarsvæðið", id="rvk")
         self.assertEqual(s.id, "rvk")
     
+    def test_empty_name_raises_error(self):
+        """Test that empty name raises error."""
+        with self.assertRaises(ValueError) as ctx:
+            Sveitarfelag(name="", population=1000, region="Region")
+        self.assertIn("name cannot be empty", str(ctx.exception))
+    
+    def test_empty_region_raises_error(self):
+        """Test that empty region raises error."""
+        with self.assertRaises(ValueError) as ctx:
+            Sveitarfelag(name="Name", population=1000, region="")
+        self.assertIn("Region cannot be empty", str(ctx.exception))
+    
+    def test_negative_population_raises_error(self):
+        """Test that negative population raises error."""
+        with self.assertRaises(ValueError) as ctx:
+            Sveitarfelag(name="Name", population=-100, region="Region")
+        self.assertIn("must be a positive integer", str(ctx.exception))
+    
+    def test_zero_population_raises_error(self):
+        """Test that zero population raises error."""
+        with self.assertRaises(ValueError) as ctx:
+            Sveitarfelag(name="Name", population=0, region="Region")
+        self.assertIn("must be a positive integer", str(ctx.exception))
+    
     def test_to_dict(self):
         """Test converting to dictionary."""
         s = Sveitarfelag(name="Reykjavík", population=131136, region="Höfuðborgarsvæðið")
@@ -94,6 +118,35 @@ class TestSveitarfelagManager(unittest.TestCase):
         updated = self.manager.get(s.id)
         self.assertEqual(updated.population, 38000)
     
+    def test_update_with_invalid_attribute_raises_error(self):
+        """Test updating with invalid attribute raises error."""
+        s = Sveitarfelag(name="Kópavogur", population=37159, region="Höfuðborgarsvæðið")
+        self.manager.add(s)
+        with self.assertRaises(ValueError) as ctx:
+            self.manager.update(s.id, invalid_field="value")
+        self.assertIn("Invalid attributes", str(ctx.exception))
+    
+    def test_update_cannot_change_id(self):
+        """Test that ID cannot be updated."""
+        s = Sveitarfelag(name="Kópavogur", population=37159, region="Höfuðborgarsvæðið")
+        self.manager.add(s)
+        original_id = s.id
+        with self.assertRaises(ValueError) as ctx:
+            self.manager.update(s.id, id="new_id")
+        self.assertIn("Invalid attributes", str(ctx.exception))
+        # Verify ID hasn't changed
+        updated = self.manager.get(original_id)
+        self.assertIsNotNone(updated)
+        self.assertEqual(updated.id, original_id)
+    
+    def test_update_with_empty_name_raises_error(self):
+        """Test updating with empty name raises error."""
+        s = Sveitarfelag(name="Kópavogur", population=37159, region="Höfuðborgarsvæðið")
+        self.manager.add(s)
+        with self.assertRaises(ValueError) as ctx:
+            self.manager.update(s.id, name="")
+        self.assertIn("name cannot be empty", str(ctx.exception))
+    
     def test_update_nonexistent_raises_error(self):
         """Test updating nonexistent municipality raises error."""
         with self.assertRaises(ValueError):
@@ -152,6 +205,16 @@ class TestSveitarfelagManager(unittest.TestCase):
         self.assertIsNotNone(loaded)
         self.assertEqual(loaded.name, "Ísafjörður")
         self.assertEqual(loaded.population, 2633)
+    
+    def test_load_corrupted_json_file(self):
+        """Test loading corrupted JSON file."""
+        # Write corrupted JSON to file
+        with open(self.temp_file.name, 'w') as f:
+            f.write("{invalid json")
+        
+        # Manager should handle this gracefully
+        manager = SveitarfelagManager(self.temp_file.name)
+        self.assertEqual(len(manager.sveitarfelog), 0)
 
 
 if __name__ == '__main__':

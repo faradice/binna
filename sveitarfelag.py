@@ -2,8 +2,20 @@
 Sveitarfélag (Municipality) data model and management system.
 """
 import json
+import unicodedata
 from typing import Optional, List, Dict
 from dataclasses import dataclass, asdict
+
+
+def normalize_id(text: str) -> str:
+    """Normalize text for use as an ID by removing diacritics and converting to lowercase."""
+    # Normalize unicode characters
+    nfd = unicodedata.normalize('NFD', text)
+    # Remove diacritics (combining characters)
+    without_diacritics = ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
+    # Convert to lowercase and replace spaces and special chars
+    normalized = without_diacritics.lower().replace(' ', '_').replace('ð', 'd').replace('þ', 'th').replace('æ', 'ae')
+    return normalized
 
 
 @dataclass
@@ -15,9 +27,17 @@ class Sveitarfelag:
     id: Optional[str] = None
     
     def __post_init__(self):
+        # Validate inputs
+        if not self.name or not self.name.strip():
+            raise ValueError("Municipality name cannot be empty")
+        if not self.region or not self.region.strip():
+            raise ValueError("Region cannot be empty")
+        if self.population <= 0:
+            raise ValueError("Population must be a positive integer")
+        
         if self.id is None:
             # Generate a simple ID from name if not provided
-            self.id = self.name.lower().replace(' ', '_').replace('ö', 'o').replace('á', 'a').replace('í', 'i').replace('ð', 'd').replace('þ', 'th').replace('æ', 'ae')
+            self.id = normalize_id(self.name)
     
     def to_dict(self) -> Dict:
         """Convert to dictionary."""
@@ -44,26 +64,36 @@ class SveitarfelagManager:
         self.sveitarfelog[sveitarfelag.id] = sveitarfelag
         self.save()
     
-    def get(self, id: str) -> Optional[Sveitarfelag]:
+    def get(self, municipality_id: str) -> Optional[Sveitarfelag]:
         """Get a municipality by ID."""
-        return self.sveitarfelog.get(id)
+        return self.sveitarfelog.get(municipality_id)
     
-    def update(self, id: str, **kwargs) -> None:
+    def update(self, municipality_id: str, **kwargs) -> None:
         """Update a municipality."""
-        if id not in self.sveitarfelog:
-            raise ValueError(f"Municipality with id '{id}' not found")
+        if municipality_id not in self.sveitarfelog:
+            raise ValueError(f"Municipality with id '{municipality_id}' not found")
         
-        sveitarfelag = self.sveitarfelog[id]
+        sveitarfelag = self.sveitarfelog[municipality_id]
+        valid_attrs = {'name', 'population', 'region'}
+        invalid_attrs = set(kwargs.keys()) - valid_attrs
+        if invalid_attrs:
+            raise ValueError(f"Invalid attributes: {', '.join(invalid_attrs)}. Valid attributes are: {', '.join(valid_attrs)}")
+        
         for key, value in kwargs.items():
-            if hasattr(sveitarfelag, key) and key != 'id':
-                setattr(sveitarfelag, key, value)
+            if key == 'name' and (not value or not value.strip()):
+                raise ValueError("Municipality name cannot be empty")
+            elif key == 'region' and (not value or not value.strip()):
+                raise ValueError("Region cannot be empty")
+            elif key == 'population' and value <= 0:
+                raise ValueError("Population must be a positive integer")
+            setattr(sveitarfelag, key, value)
         self.save()
     
-    def delete(self, id: str) -> None:
+    def delete(self, municipality_id: str) -> None:
         """Delete a municipality."""
-        if id not in self.sveitarfelog:
-            raise ValueError(f"Municipality with id '{id}' not found")
-        del self.sveitarfelog[id]
+        if municipality_id not in self.sveitarfelog:
+            raise ValueError(f"Municipality with id '{municipality_id}' not found")
+        del self.sveitarfelog[municipality_id]
         self.save()
     
     def list_all(self) -> List[Sveitarfelag]:
@@ -78,7 +108,7 @@ class SveitarfelagManager:
     
     def save(self) -> None:
         """Save municipalities to file."""
-        data = {id: s.to_dict() for id, s in self.sveitarfelog.items()}
+        data = {municipality_id: s.to_dict() for municipality_id, s in self.sveitarfelog.items()}
         with open(self.storage_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
     
@@ -91,6 +121,6 @@ class SveitarfelagManager:
                     self.sveitarfelog = {}
                 else:
                     data = json.loads(content)
-                    self.sveitarfelog = {id: Sveitarfelag.from_dict(s) for id, s in data.items()}
+                    self.sveitarfelog = {municipality_id: Sveitarfelag.from_dict(s) for municipality_id, s in data.items()}
         except (FileNotFoundError, json.JSONDecodeError):
             self.sveitarfelog = {}

@@ -18,25 +18,25 @@ def main():
     add_parser.add_argument('name', help='Municipality name')
     add_parser.add_argument('population', type=int, help='Population')
     add_parser.add_argument('region', help='Region name')
-    add_parser.add_argument('--id', help='Custom ID (optional)')
+    add_parser.add_argument('--municipality-id', help='Custom ID (optional)')
     
     # List command
     subparsers.add_parser('list', help='List all municipalities')
     
     # Get command
     get_parser = subparsers.add_parser('get', help='Get a municipality by ID')
-    get_parser.add_argument('id', help='Municipality ID')
+    get_parser.add_argument('municipality_id', help='Municipality ID')
     
     # Update command
     update_parser = subparsers.add_parser('update', help='Update a municipality')
-    update_parser.add_argument('id', help='Municipality ID')
+    update_parser.add_argument('municipality_id', help='Municipality ID')
     update_parser.add_argument('--name', help='New name')
     update_parser.add_argument('--population', type=int, help='New population')
     update_parser.add_argument('--region', help='New region')
     
     # Delete command
     delete_parser = subparsers.add_parser('delete', help='Delete a municipality')
-    delete_parser.add_argument('id', help='Municipality ID')
+    delete_parser.add_argument('municipality_id', help='Municipality ID')
     
     # Search command
     search_parser = subparsers.add_parser('search', help='Search municipalities')
@@ -56,7 +56,7 @@ def main():
                 name=args.name,
                 population=args.population,
                 region=args.region,
-                id=args.id
+                id=args.municipality_id
             )
             manager.add(sveitarfelag)
             print(f"Added municipality: {sveitarfelag.name} (ID: {sveitarfelag.id})")
@@ -72,14 +72,14 @@ def main():
                     print(f"{s.name:<30} {s.population:<15} {s.region:<20} {s.id}")
         
         elif args.command == 'get':
-            sveitarfelag = manager.get(args.id)
+            sveitarfelag = manager.get(args.municipality_id)
             if sveitarfelag:
                 print(f"\nName:       {sveitarfelag.name}")
                 print(f"Population: {sveitarfelag.population}")
                 print(f"Region:     {sveitarfelag.region}")
                 print(f"ID:         {sveitarfelag.id}")
             else:
-                print(f"Municipality with ID '{args.id}' not found.")
+                print(f"Municipality with ID '{args.municipality_id}' not found.")
                 return 1
         
         elif args.command == 'update':
@@ -95,12 +95,12 @@ def main():
                 print("No updates specified. Use --name, --population, or --region.")
                 return 1
             
-            manager.update(args.id, **updates)
-            print(f"Updated municipality with ID '{args.id}'")
+            manager.update(args.municipality_id, **updates)
+            print(f"Updated municipality with ID '{args.municipality_id}'")
         
         elif args.command == 'delete':
-            manager.delete(args.id)
-            print(f"Deleted municipality with ID '{args.id}'")
+            manager.delete(args.municipality_id)
+            print(f"Deleted municipality with ID '{args.municipality_id}'")
         
         elif args.command == 'search':
             results = manager.search(args.query)
@@ -115,8 +115,13 @@ def main():
         
         return 0
     
-    except Exception as e:
+    except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
+        return 1
+    except Exception as e:
+        print(f"Unexpected error: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
         return 1
 
 
