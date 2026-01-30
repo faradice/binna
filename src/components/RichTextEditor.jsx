@@ -42,7 +42,7 @@ function ToolbarButton({ onClick, isActive, disabled, children, title }) {
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`p-2 rounded transition-colors ${
+      className={`p-2 rounded transition-colors flex-shrink-0 ${
         isActive
           ? 'bg-violet-100 text-violet-700'
           : 'text-gray-600 hover:bg-gray-100'
@@ -57,7 +57,7 @@ function ColorPicker({ colors, currentColor, onSelect, icon: Icon, title }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="relative">
+    <div className="relative flex-shrink-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
         title={title}
@@ -95,7 +95,7 @@ function ColorPicker({ colors, currentColor, onSelect, icon: Icon, title }) {
 }
 
 function Divider() {
-  return <div className="w-px h-6 bg-gray-300 mx-1" />
+  return <div className="w-px h-6 bg-gray-300 mx-1 flex-shrink-0" />
 }
 
 export default function RichTextEditor({ value, onChange, placeholder }) {
@@ -146,7 +146,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-violet-500 focus-within:border-transparent">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 p-2 bg-gray-50 border-b border-gray-200">
+      <div className="flex flex-nowrap items-center gap-0.5 p-2 bg-gray-50 border-b border-gray-200 overflow-x-auto">
         {/* Undo/Redo */}
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
@@ -271,13 +271,13 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
       {/* Editor content */}
       <EditorContent
         editor={editor}
-        className="prose prose-sm max-w-none p-4 min-h-[200px] focus:outline-none"
+        className="prose prose-sm max-w-none p-4 focus:outline-none"
       />
 
       <style>{`
         .ProseMirror {
           outline: none;
-          min-height: 200px;
+          min-height: 150px;
         }
         .ProseMirror p {
           margin: 0.5em 0;

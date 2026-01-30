@@ -1,0 +1,13 @@
+id,kennitala,nafn,heimili,netfang,skoli,skoliId,kyn,argangur,argangsNumer,bekkur,bekkurId,hopar,sveitarfelag,sveitarfelag_skola
+1,010115-2020,Jón Jónsson,Brákarbraut 12,jon@example.com,Borgaskóli,1,Drengur,5. bekkur,5,5A,1,5|6,Bollabyggð,Bollabyggð
+2,150214-3030,Anna Sigurðardóttir,Hafnargata 5,anna@example.com,Borgaskóli,1,Stúlka,6. bekkur,6,6A,3,5,Bollabyggð,Bollabyggð
+3,220316-4040,Sigurður Ólafsson,Túngata 8,siggi@example.com,Dalskóli,2,Drengur,4. bekkur,4,4A,7,10,Bollabyggð,Bollabyggð
+4,080517-5050,Guðrún Helgadóttir,Lækjargata 22,gudrun@example.com,Borgaskóli,1,Stúlka,5. bekkur,5,5B,2,6,Bollabyggð,Bollabyggð
+5,121018-6060,Ólafur Magnússon,Vesturgata 7,olafur@example.com,Dalskóli,2,Kynsegin/Annað,7. bekkur,7,7A,9,10,Bollabyggð,Bollabyggð
+6,050416-7070,Helga Kristinsdóttir,Holtsgata 3,helga.k@example.com,Akurskóli,,Stúlka,8. bekkur,8,8A,,,Bollabyggð,Akurbyggð
+7,200317-8080,Bjarni Þórsson,Skógarhlíð 11,bjarni@example.com,Fellsskóli,,Drengur,9. bekkur,9,9A,,,Bollabyggð,Fellsbyggð
+8,150218-9090,Sara Jónsdóttir,Miðbraut 5,sara@example.com,Borgaskóli,1,Stúlka,6. bekkur,6,6B,4,5|6,Akurbyggð,Bollabyggð
+9,080119-1010,Kristján Magnússon,Vallarvegur 8,kristjan@example.com,Dalskóli,2,Drengur,5. bekkur,5,5A,8,10,Fellsbyggð,Bollabyggð
+10,150680-1234,Ragnar Valdímarsson,Prófunargata 1,ragnar@faradice.com,Borgaskóli,1,Drengur,9. bekkur,5,5A,1,5,Bollabyggð,Bollabyggð
+11,130769-4899,Brynja Baldursdóttir,Hringbraut 109,brynja69@gmail.com,Hagaskóli,1,Stúlka,5. bekkur,5,5A,1,5,Bollabyggð,Akureyri
+

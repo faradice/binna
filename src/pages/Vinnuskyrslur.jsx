@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { Download, CheckSquare, Square } from 'lucide-react'
 import DataTable from '../components/DataTable'
 import { exportToCSV, exportToExcel } from '../utils/export'
-import { vinnuskyrslur } from '../data/mockData'
+import { useVinnuskyrslur } from '../services/hooks'
 import { useLanguage } from '../contexts/LanguageContext'
 
 // Columns grouped by category
@@ -72,6 +72,9 @@ export default function Vinnuskyrslur() {
   const [selectedIds, setSelectedIds] = useState([])
   const [showExportMenu, setShowExportMenu] = useState(false)
 
+  // Fetch vinnuskyrslur from API
+  const { data: vinnuskyrslur = [], isLoading, error } = useVinnuskyrslur()
+
   const toggleGroup = (groupId) => {
     setActiveGroups((prev) =>
       prev.includes(groupId)
@@ -88,7 +91,7 @@ export default function Vinnuskyrslur() {
   const dataToExport = useMemo(() => {
     if (selectedIds.length === 0) return vinnuskyrslur
     return vinnuskyrslur.filter((item) => selectedIds.includes(item.id))
-  }, [selectedIds])
+  }, [selectedIds, vinnuskyrslur])
 
   const handleExportCSV = () => {
     exportToCSV(dataToExport, allColumns, 'vinnuskyrslur')
@@ -106,6 +109,24 @@ export default function Vinnuskyrslur() {
 
   const clearSelection = () => {
     setSelectedIds([])
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          Villa við að sækja gögn: {error.message}
+        </div>
+      </div>
+    )
   }
 
   return (

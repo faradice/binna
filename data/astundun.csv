@@ -1,0 +1,13 @@
+id,nemandaId,nafn,kennitala,skoli,argangur,manudur,ar,fjarvistir,seint,leyfi,veikindi,pirindarTimar,pirindarTimarMaett
+1,1,Jón Jónsson,010115-2020,Borgaskóli,5. bekkur,Janúar,2024,2,3,1,2,160,152
+2,1,Jón Jónsson,010115-2020,Borgaskóli,5. bekkur,Febrúar,2024,1,2,0,5,152,144
+3,2,Anna Sigurðardóttir,150214-3030,Borgaskóli,6. bekkur,Janúar,2024,0,1,2,1,160,156
+4,2,Anna Sigurðardóttir,150214-3030,Borgaskóli,6. bekkur,Febrúar,2024,1,0,1,0,152,150
+5,3,Sigurður Ólafsson,220316-4040,Dalskóli,4. bekkur,Janúar,2024,12,8,3,5,160,132
+6,3,Sigurður Ólafsson,220316-4040,Dalskóli,4. bekkur,Febrúar,2024,10,6,2,8,152,126
+7,4,Guðrún Helgadóttir,080517-5050,Borgaskóli,5. bekkur,Janúar,2024,0,0,3,0,160,157
+8,4,Guðrún Helgadóttir,080517-5050,Borgaskóli,5. bekkur,Febrúar,2024,1,1,0,4,152,146
+9,5,Ólafur Magnússon,121018-6060,Dalskóli,7. bekkur,Janúar,2024,15,8,4,6,160,127
+10,5,Ólafur Magnússon,121018-6060,Dalskóli,7. bekkur,Febrúar,2024,8,5,3,10,152,126
+11,10,Ragnar Valdímarsson,150680-1234,Borgaskóli,5. bekkur,Janúar,2024,1,2,1,1,160,155
+12,10,Ragnar Valdímarsson,150680-1234,Borgaskóli,5. bekkur,Febrúar,2024,0,1,0,2,152,149

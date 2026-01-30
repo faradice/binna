@@ -1,0 +1,7 @@
+id,kennitala,nafn,heimili,netfang,simi,farsimi,tengsl,vinnustadur,vinnusimi,forsja,adaltengilid,nemendur
+1,150575-5050,Guðrún Jónsdóttir,Brákarbraut 12,gudrun@example.com,555-1234,899-1234,Móðir,Landspítali,543-1000,Sameiginleg,Já,Jón Jónsson
+2,100573-1234,Jón Pétursson,Brákarbraut 12,jonp@example.com,555-1235,899-1235,Faðir,Síminn,550-5000,Sameiginleg,Nei,Jón Jónsson
+3,220680-6060,Ólafur Sigurðsson,Hafnargata 5,olafur@example.com,555-5678,899-5678,Faðir,Isavia,424-4000,Sameiginleg,Já,Anna Sigurðardóttir
+4,180682-7070,Sigríður Magnúsdóttir,Hafnargata 5,sigridur@example.com,555-5679,899-5679,Móðir,Háskóli Íslands,525-4000,Sameiginleg,Nei,Anna Sigurðardóttir|Guðrún Helgadóttir
+5,050278-8080,Magnús Helgason,Túngata 8,magnus.h@example.com,555-8888,899-8888,Faðir,Marel,563-8000,Ein forsjá,Já,Sigurður Ólafsson
+6,120985-9090,Anna Björk Þórsdóttir,Lækjargata 22,annabjork@example.com,555-9999,899-9999,Móðir,Landsbankinn,410-4000,Sameiginleg,Já,Guðrún Helgadóttir

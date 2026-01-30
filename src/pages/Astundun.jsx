@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Download, BarChart3, Table2, AlertTriangle, Filter } from 'lucide-react'
+import { Download, BarChart3, Table2, AlertTriangle } from 'lucide-react'
 import {
   BarChart,
   Bar,
@@ -15,7 +15,7 @@ import {
 } from 'recharts'
 import DataTable from '../components/DataTable'
 import { exportToCSV, exportToExcel } from '../utils/export'
-import { astundun, skolar } from '../data/mockData'
+import { useAstundun, useSkolar } from '../services/hooks'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const ABSENCE_THRESHOLD = 10 // Flag students with >10% absence
@@ -27,6 +27,12 @@ export default function Astundun() {
   const [selectedSkoli, setSelectedSkoli] = useState('allir')
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [showOnlyFlagged, setShowOnlyFlagged] = useState(false)
+
+  // Fetch data from API
+  const { data: astundun = [], isLoading: isLoadingAstundun } = useAstundun()
+  const { data: skolar = [], isLoading: isLoadingSkolar } = useSkolar()
+
+  const isLoading = isLoadingAstundun || isLoadingSkolar
 
   // Columns with translations
   const columns = useMemo(() => [
@@ -86,7 +92,7 @@ export default function Astundun() {
         isFlagged: parseFloat(fjarvistarHlutfall) > ABSENCE_THRESHOLD,
       }
     })
-  }, [])
+  }, [astundun])
 
   // Filter data by school and flagged status
   const filteredData = useMemo(() => {
@@ -173,6 +179,14 @@ export default function Astundun() {
   const handleExportExcel = () => {
     exportToExcel(filteredData, columns, 'astundun')
     setShowExportMenu(false)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+      </div>
+    )
   }
 
   return (

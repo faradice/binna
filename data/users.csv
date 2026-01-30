@@ -1,0 +1,5 @@
+id,username,password,nafn,netfang,role,active,createdAt,lastLogin
+1,admin,admin123,Jón Kerfisstjóri,admin@bollabyggd.is,admin,true,2024-01-01,2025-01-30
+2,starfsmenn,staff123,Anna Starfsmannastjóri,anna@bollabyggd.is,starfsmannastjori,true,2024-02-15,2025-01-29
+3,skoli,school123,Björn Skólastjóri,bjorn@bollabyggd.is,skolaskrifstofa,true,2024-03-10,2025-01-28
+4,samskipti,comms123,Sara Samskiptastjóri,sara@bollabyggd.is,samskipti,true,2024-04-20,2025-01-27

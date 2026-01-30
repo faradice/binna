@@ -1,11 +1,14 @@
 import { useMemo } from 'react'
 import DataTable from '../components/DataTable'
 import ExportButton from '../components/ExportButton'
-import { adstandendur } from '../data/mockData'
+import { useAdstandendur } from '../services/hooks'
 import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Adstandendur() {
   const { t } = useLanguage()
+
+  // Fetch adstandendur from API
+  const { data: adstandendur = [], isLoading, error } = useAdstandendur()
 
   const columns = useMemo(() => [
     { key: 'nafn', label: t('adstandendur.nafn') },
@@ -17,14 +20,36 @@ export default function Adstandendur() {
     { key: 'simi', label: t('adstandendur.simi') },
     { key: 'farsimi', label: t('adstandendur.farsimi') },
     { key: 'netfang', label: t('adstandendur.netfang') },
-    { key: 'vinnustadur', label: t('adstandendur.vinnustadur') },
     { key: 'vinnusimi', label: t('adstandendur.vinnusimi') },
     {
-      key: 'nemendur',
-      label: t('adstandendur.nempidar'),
-      render: (value) => value?.join(', ') || '-',
+      key: 'barn1',
+      label: `${t('adstandendur.nempidar')} 1`,
+      render: (_, row) => row.nemendur?.[0] || '-',
+    },
+    {
+      key: 'barn2',
+      label: `${t('adstandendur.nempidar')} 2`,
+      render: (_, row) => row.nemendur?.[1] || '-',
     },
   ], [t])
+
+  if (isLoading) {
+    return (
+      <div className="p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          Villa við að sækja gögn: {error.message}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="p-8">

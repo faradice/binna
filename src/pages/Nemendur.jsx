@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import DataTable from '../components/DataTable'
 import ExportButton from '../components/ExportButton'
-import { nemendur } from '../data/mockData'
+import { useNemendur } from '../services/hooks'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const SVEITARFELAG = 'Bollabyggð' // Núverandi sveitarfélag
@@ -9,6 +9,9 @@ const SVEITARFELAG = 'Bollabyggð' // Núverandi sveitarfélag
 export default function Nemendur() {
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState('allir')
+
+  // Fetch nemendur from API
+  const { data: nemendur = [], isLoading, error } = useNemendur()
 
   const columns = useMemo(() => [
     { key: 'nafn', label: t('nemendur.nafn') },
@@ -49,7 +52,7 @@ export default function Nemendur() {
       default:
         return nemendur
     }
-  }, [activeTab])
+  }, [activeTab, nemendur])
 
   const getTabCount = (tabId) => {
     switch (tabId) {
@@ -68,6 +71,24 @@ export default function Nemendur() {
       default:
         return nemendur.length
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          Villa við að sækja gögn: {error.message}
+        </div>
+      </div>
+    )
   }
 
   return (
